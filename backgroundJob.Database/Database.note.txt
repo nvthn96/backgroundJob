@@ -1,0 +1,5 @@
+* Create a migration
+Open target project folder
+dotnet ef migrations add Initial
+dotnet ef database update
+

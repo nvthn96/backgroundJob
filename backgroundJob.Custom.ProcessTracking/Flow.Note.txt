@@ -1,0 +1,25 @@
+* Create a transaction
+
+Success template
+
+async Task<bool> func(FileUnitOfWork unitOfWork, CancellationToken token = default)	
+{	
+	contentResult = await unitOfWork.FileContent.AddAsync(fileContent, token);
+	historyResult = await unitOfWork.FileHistory.AddAsync(fileHistory, token);
+	return true;
+}	
+	
+await fileUnitOfWork.RunTransaction(fileUnitOfWork, func, token);	
+	
+	
+Rollback template
+	
+async Task<bool> func(FileUnitOfWork unitOfWork, CancellationToken token = default)	
+{	
+	await unitOfWork.FileContent.AddAsync(fileContent, token);
+	throw new Exception();
+	//await unitOfWork.FileHistory.AddAsync(fileHistory, token);
+	//return true;
+}	
+	
+await fileUnitOfWork.RunTransaction(fileUnitOfWork, func, token);	
