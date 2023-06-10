@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,7 +22,6 @@
     <ProjectReference Include="..\backgroundJob.Database\backgroundJob.Database.csproj" />
     <ProjectReference Include="..\backgroundJob.Extensions\backgroundJob.Extensions.csproj" />
     <ProjectReference Include="..\backgroundJob.Infrastructure\backgroundJob.Infrastructure.csproj" />
-    <ProjectReference Include="..\backgroundJob.Utility\backgroundJob.Utility.csproj" />
   </ItemGroup>
 
 </Project>

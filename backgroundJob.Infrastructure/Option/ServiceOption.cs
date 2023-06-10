@@ -4,11 +4,8 @@
 	{
 		public ServiceStatus Status { get; set; }
 		public ServiceRepeat Repeat { get; set; }
-		public TimedOption Timed { get; set; }
+		public TimedOption? Timed { get; set; }
 
-		public ServiceOption()
-		{
-			Timed = new();
-		}
+		public ServiceOption() { }
 	}
 }

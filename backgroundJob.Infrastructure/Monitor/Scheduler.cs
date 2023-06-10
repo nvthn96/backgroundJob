@@ -1,4 +1,5 @@
-﻿using backgroundJob.Infrastructure.Option;
+﻿using backgroundJob.Extensions;
+using backgroundJob.Infrastructure.Option;
 using backgroundJob.Infrastructure.Queue;
 using backgroundJob.Infrastructure.Service;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +34,7 @@ namespace backgroundJob.Infrastructure.Monitor
 			using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
 			try
 			{
-				while (await timer.WaitForNextTickAsync(stoppingToken))
+				do
 				{
 					var readyItems = GetReadyItems();
 
@@ -47,6 +48,8 @@ namespace backgroundJob.Infrastructure.Monitor
 					_listCompleted.AddRange(completedItems);
 					_listTimedService.RemoveAll(item => completedItems.Contains(item));
 				}
+				while (await timer.WaitForNextTickAsync(stoppingToken));
+
 			}
 			catch (OperationCanceledException)
 			{
@@ -74,7 +77,9 @@ namespace backgroundJob.Infrastructure.Monitor
 		private IEnumerable<TimedItem> GetReadyItems()
 		{
 			var currentTime = DateTime.UtcNow;
-			var readyTimedItems = _listTimedService.Where(item => currentTime >= item.NextTimeRunning);
+			var readyTimedItems = _listTimedService
+				.Where(item => item.Service.Option.Repeat.IsEnum(ServiceRepeat.None)
+				|| currentTime >= item.NextTimeRunning);
 
 			return readyTimedItems;
 		}
@@ -83,7 +88,8 @@ namespace backgroundJob.Infrastructure.Monitor
 		{
 			var currentTime = DateTime.UtcNow;
 			var completedItems = _listTimedService
-				.Where(item => item.Service.Option.Status == ServiceStatus.Completed);
+				.Where(item => item.Service.Option.Repeat.IsEnum(ServiceRepeat.None)
+				|| item.Service.Option.Status.IsEnum(ServiceStatus.Completed));
 
 			return completedItems;
 		}

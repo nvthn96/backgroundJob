@@ -5,6 +5,6 @@ namespace backgroundJob.Infrastructure.Service
 	public interface IScopedService
 	{
 		public ServiceOption Option { get; set; }
-		public Task RunAsync(CancellationToken token = default);
+		public Task RunAsync(CancellationToken token);
 	}
 }

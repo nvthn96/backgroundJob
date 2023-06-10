@@ -40,7 +40,7 @@ namespace backgroundJob.Custom.ProcessTracking.Flows
 			// create a function for transaction
 			async Task<bool> func(ProcessDatabase unitOfWork, CancellationToken token = default)
 			{
-				// get processes from system where the process is exists in the OnCreating list
+				// get processes from system which is exists in OnCreating list
 				// convert and insert into Process table
 				var processCreate = processes
 					.Where(p => model.OnCreating.Contains(p.ExecutablePath))

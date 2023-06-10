@@ -12,14 +12,21 @@ namespace backgroundJob.Infrastructure.Monitor
 		public TimedItem(IScopedService service)
 		{
 			Service = service;
-			NextTimeRunning = service.Option.Timed.StartTime;
+			SetNextTimeStart();
 		}
 
 		public TimedItem(IScopedService service, ServiceOption options)
 		{
 			Service = service;
 			Service.Option = options;
-			NextTimeRunning = service.Option.Timed.StartTime;
+			SetNextTimeStart();
+		}
+
+		private void SetNextTimeStart()
+		{
+			NextTimeRunning = Service.Option.Repeat.IsEnum(ServiceRepeat.None)
+				? DateTime.UtcNow
+				: Service.Option.Timed!.StartTime;
 		}
 
 		public void SetNextTimeRunning()
@@ -30,19 +37,20 @@ namespace backgroundJob.Infrastructure.Monitor
 			switch (option.Repeat)
 			{
 				case ServiceRepeat.None:
+					NextTimeRunning = currentTime;
 					break;
 
 				case ServiceRepeat.Second:
 				case ServiceRepeat.Minute:
 				case ServiceRepeat.Hour:
 				case ServiceRepeat.Day:
-					NextTimeRunning = NextTimeRunning.GetNextInterval(currentTime, option.Timed.Interval);
+					NextTimeRunning = NextTimeRunning.GetNextInterval(currentTime, option.Timed!.Interval);
 					break;
 
 				case ServiceRepeat.Week:
 					{
 						var dayOfWeek = NextTimeRunning.DayOfWeek;
-						var listDayOfWeek = option.Timed.DaysOfWeek;
+						var listDayOfWeek = option.Timed!.DaysOfWeek;
 						if (listDayOfWeek.Count == 1)
 						{
 							NextTimeRunning = NextTimeRunning.GetNextWeekday(dayOfWeek);
@@ -59,7 +67,7 @@ namespace backgroundJob.Infrastructure.Monitor
 				case ServiceRepeat.Month:
 					{
 						var dayOfMonth = NextTimeRunning.Day;
-						var listDayOfMonth = option.Timed.DaysOfMonth;
+						var listDayOfMonth = option.Timed!.DaysOfMonth;
 						if (listDayOfMonth.Count == 1)
 						{
 							NextTimeRunning = NextTimeRunning.GetNextMonthday(dayOfMonth);
@@ -76,7 +84,7 @@ namespace backgroundJob.Infrastructure.Monitor
 				case ServiceRepeat.Year:
 					{
 						var dayOfYear = NextTimeRunning;
-						var listDayOfYear = option.Timed.DaysOfYear;
+						var listDayOfYear = option.Timed!.DaysOfYear;
 						if (listDayOfYear.Count == 1)
 						{
 							NextTimeRunning = NextTimeRunning.GetNextYearday(dayOfYear);

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\backgroundJob.Custom.FileWatcher\backgroundJob.Custom.FileWatcher.csproj" />
     <ProjectReference Include="..\backgroundJob.Custom.ProcessTracking\backgroundJob.Custom.ProcessTracking.csproj" />
     <ProjectReference Include="..\backgroundJob.Infrastructure\backgroundJob.Infrastructure.csproj" />
   </ItemGroup>

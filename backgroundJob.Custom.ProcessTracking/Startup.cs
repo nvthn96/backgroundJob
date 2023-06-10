@@ -1,20 +1,21 @@
 ﻿using backgroundJob.Custom.ProcessTracking.Database;
 using backgroundJob.Infrastructure.Monitor;
 using backgroundJob.Infrastructure.Option;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace backgroundJob
+namespace backgroundJob.Custom.ProcessTracking
 {
 	public class Startup : BackgroundService
 	{
-		private IServiceProvider _services;
-		private Scheduler _scheduler;
+		private readonly IServiceProvider _services;
+		private readonly Scheduler _scheduler;
 
 		public Startup(IServiceProvider services, Scheduler scheduler)
 		{
 			_services = services;
 			_scheduler = scheduler;
 		}
-
 		protected override Task ExecuteAsync(CancellationToken stoppingToken)
 		{
 			using (var scope = _services.CreateScope())
@@ -22,12 +23,13 @@ namespace backgroundJob
 				// ensure database is created
 				var processContext = scope.ServiceProvider.GetRequiredService<ProcessContext>();
 				processContext.Database.EnsureCreated();
-				//processContext.Database.Migration();
+#if !DEBUG
+				processContext.Database.Migrate();
+#endif
 				// end ensure database is created
 
-				// add process tracking to scheduler
 				var processTracking = scope.ServiceProvider
-					.GetRequiredService<Custom.ProcessTracking.CustomService>();
+					.GetRequiredService<CustomService>();
 
 				var processTrackingOptions = new ServiceOption()
 				{
@@ -42,7 +44,6 @@ namespace backgroundJob
 				};
 
 				_scheduler.AddService(processTracking, processTrackingOptions);
-				// end add process tracking to scheduler
 			}
 
 			return Task.CompletedTask;

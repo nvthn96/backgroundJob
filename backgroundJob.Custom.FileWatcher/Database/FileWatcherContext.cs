@@ -1,17 +1,17 @@
-﻿using backgroundJob.Custom.ProcessTracking.Entity;
+﻿using backgroundJob.Custom.FileWatcher.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace backgroundJob.Custom.ProcessTracking.Database
+namespace backgroundJob.Custom.FileWatcher.Database
 {
-	public class ProcessContext : DbContext
+	public class FileWatcherContext : DbContext
 	{
 		private readonly string connectionStr = @"Server=.\SQLEXPRESS;Database=BackgroundJob;Integrated Security=true;TrustServerCertificate=True;";
 		private readonly string migrationTable = @"__MigrationsHistory";
-		private readonly string schema = "PT";
+		private readonly string schema = "FW";
 
-		public ProcessContext() { }
+		public FileWatcherContext() { }
 
-		public ProcessContext(DbContextOptions<ProcessContext> options) : base(options)
+		public FileWatcherContext(DbContextOptions<FileWatcherContext> options) : base(options)
 		{
 		}
 
@@ -26,7 +26,7 @@ namespace backgroundJob.Custom.ProcessTracking.Database
 			optionsBuilder.UseSqlServer(connectionStr, d => d.MigrationsHistoryTable(migrationTable, schema));
 		}
 
-		public DbSet<PTProcess> Process { get; set; }
-		public DbSet<PTTime> Time { get; set; }
+		public DbSet<FWPath> Path { get; set; }
+		public DbSet<FWEvent> Event { get; set; }
 	}
 }

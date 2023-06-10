@@ -25,7 +25,7 @@ namespace backgroundJob.Infrastructure.Queue
 			while (!token.IsCancellationRequested)
 			{
 				var service = await DeQueue(token);
-				await service.RunAsync(token);
+				_ = service.RunAsync(token).ConfigureAwait(false);
 			}
 		}
 

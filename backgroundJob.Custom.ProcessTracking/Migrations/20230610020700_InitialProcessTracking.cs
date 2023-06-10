@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backgroundJob.Custom.ProcessTracking.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialProcessTracking : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,6 @@ namespace backgroundJob.Custom.ProcessTracking.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PID = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CommandLine = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExecutablePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -45,7 +44,7 @@ namespace backgroundJob.Custom.ProcessTracking.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PID = table.Column<int>(type: "int", nullable: false),
+                    ProcessId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstDetect = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastDetect = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),

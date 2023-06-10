@@ -3,35 +3,34 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using backgroundJob.Custom.ProcessTracking.Database;
+using backgroundJob.Custom.FileWatcher.Database;
 
 #nullable disable
 
-namespace backgroundJob.Custom.ProcessTracking.Migrations
+namespace backgroundJob.Custom.FileWatcher.Migrations
 {
-    [DbContext(typeof(ProcessContext))]
-    partial class ProcessContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(FileWatcherContext))]
+    [Migration("20230610015335_InitialFileWatcher")]
+    partial class InitialFileWatcher
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("PT")
+                .HasDefaultSchema("FW")
                 .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("backgroundJob.Custom.ProcessTracking.Entity.PTProcess", b =>
+            modelBuilder.Entity("backgroundJob.Custom.FileWatcher.Entity.FWEvent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CommandLine")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -48,8 +47,7 @@ namespace backgroundJob.Custom.ProcessTracking.Migrations
                     b.Property<string>("DeletedReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ExecutablePath")
-                        .IsRequired()
+                    b.Property<string>("Event")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -64,16 +62,18 @@ namespace backgroundJob.Custom.ProcessTracking.Migrations
                     b.Property<string>("ModifiedReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("PathId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Process", "PT");
+                    b.ToTable("Event", "FW");
                 });
 
-            modelBuilder.Entity("backgroundJob.Custom.ProcessTracking.Entity.PTTime", b =>
+            modelBuilder.Entity("backgroundJob.Custom.FileWatcher.Entity.FWPath", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,14 +94,15 @@ namespace backgroundJob.Custom.ProcessTracking.Migrations
                     b.Property<string>("DeletedReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FirstDetect")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IncludeSubFolders")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastDetect")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
@@ -112,12 +113,13 @@ namespace backgroundJob.Custom.ProcessTracking.Migrations
                     b.Property<string>("ModifiedReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProcessId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Time", "PT");
+                    b.ToTable("Path", "FW");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,11 +2,13 @@
 {
 	public enum ServiceStatus
 	{
-		New = 0x0,
-		Added = 0x1,
-		Running = 0x2,
-		Stopped = 0x4,
-		Success = 0x8,
-		Completed = 0x16,
+		New = 0x1,
+		Added = 0x2,
+		Ready = 0x4,
+		Running = 0x8,
+		Stopped = 0x16,
+		Exception = 0x32,
+		Success = 0x64,
+		Completed = 0x128,
 	}
 }
