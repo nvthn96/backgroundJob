@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\backgroundJob.Custom.ApiChecking\backgroundJob.Custom.ApiChecking.csproj" />
     <ProjectReference Include="..\backgroundJob.Custom.FileWatcher\backgroundJob.Custom.FileWatcher.csproj" />
     <ProjectReference Include="..\backgroundJob.Custom.ProcessTracking\backgroundJob.Custom.ProcessTracking.csproj" />
     <ProjectReference Include="..\backgroundJob.Infrastructure\backgroundJob.Infrastructure.csproj" />

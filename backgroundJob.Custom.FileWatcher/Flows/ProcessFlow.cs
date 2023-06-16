@@ -18,12 +18,12 @@ namespace backgroundJob.Custom.FileWatcher.Flows
 
 			var newPaths = paths.Where(p => !p.IsDeleted && !pathSet.Contains(p.Path)).ToArray();
 
-			var deletedPaths = paths.Where(p => p.IsDeleted && pathSet.Contains(p.Path)).ToArray();
+			var movedPaths = paths.Where(p => p.IsDeleted && pathSet.Contains(p.Path)).ToArray();
 
 			return new FlowModel()
 			{
 				NewPaths = newPaths,
-				MovedPaths = deletedPaths,
+				MovedPaths = movedPaths,
 			};
 		}
 

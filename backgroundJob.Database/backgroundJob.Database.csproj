@@ -12,4 +12,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\backgroundJob.Extensions\backgroundJob.Extensions.csproj" />
+    <ProjectReference Include="..\backgroundJob.Infrastructure\backgroundJob.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

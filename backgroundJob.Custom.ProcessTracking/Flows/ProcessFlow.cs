@@ -87,7 +87,7 @@ namespace backgroundJob.Custom.ProcessTracking.Flows
 				var topLastDetectOnChecking = topLastDetect.Where(t => model.OnCheckingId.Contains(t.ProcessId));
 
 				var currentTime = DateTime.UtcNow;
-				var acceptTimeSpan = option.Timed.Interval.Add(TimeSpan.FromSeconds(10));
+				var acceptTimeSpan = option.Timed!.Interval.Add(TimeSpan.FromSeconds(10));
 				var acceptLastDetect = currentTime.Subtract(acceptTimeSpan);
 				var timeOnCreate = topLastDetectOnChecking.Where(t => t.LastDetect < acceptLastDetect);
 				var timeOnUpdate = topLastDetectOnChecking.Where(t => t.LastDetect >= acceptLastDetect);

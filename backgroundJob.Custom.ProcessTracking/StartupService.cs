@@ -1,28 +1,30 @@
 ﻿using backgroundJob.Custom.ProcessTracking.Database;
 using backgroundJob.Infrastructure.Monitor;
 using backgroundJob.Infrastructure.Option;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace backgroundJob.Custom.ProcessTracking
 {
-	public class Startup : BackgroundService
+	public class StartupService : BackgroundService
 	{
 		private readonly IServiceProvider _services;
 		private readonly Scheduler _scheduler;
 
-		public Startup(IServiceProvider services, Scheduler scheduler)
+		public StartupService(IServiceProvider services, Scheduler scheduler)
 		{
 			_services = services;
 			_scheduler = scheduler;
 		}
+
 		protected override Task ExecuteAsync(CancellationToken stoppingToken)
 		{
 			using (var scope = _services.CreateScope())
 			{
 				// ensure database is created
 				var processContext = scope.ServiceProvider.GetRequiredService<ProcessContext>();
-				processContext.Database.EnsureCreated();
+				//processContext.Database.EnsureCreated();
 #if !DEBUG
 				processContext.Database.Migrate();
 #endif
